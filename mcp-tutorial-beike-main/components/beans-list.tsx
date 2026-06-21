@@ -15,7 +15,11 @@ type Bean = {
 
 type LoadingState = "idle" | "loading" | "success" | "error";
 
-export function BeansList() {
+type BeansListProps = {
+  refreshKey?: number;
+};
+
+export function BeansList({ refreshKey = 0 }: BeansListProps) {
   const [beans, setBeans] = useState<Bean[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [state, setState] = useState<LoadingState>("idle");
@@ -68,7 +72,7 @@ export function BeansList() {
     void loadBeans();
 
     return () => controller.abort();
-  }, []);
+  }, [refreshKey]);
 
   const isLoading = state === "loading" || state === "idle";
   const isError = state === "error";

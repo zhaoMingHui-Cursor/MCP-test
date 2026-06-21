@@ -65,6 +65,7 @@
 
 ## API 接口
 - `GET /api/beans`：返回 `beans` 表的全部记录，按 `created_at` 倒序排列。后端使用 `SUPABASE_SERVICE_ROLE_KEY` 读取数据，前端页面（`app/beans/page.tsx`）通过该接口渲染列表。
+- `POST /api/beans`：创建一条咖啡豆记录。请求体 JSON 字段：`name`、`flavor_profile`、`origin`、`tags`（字符串数组）、`image_url`，全部必填且不可为空。后端校验通过后使用 `SUPABASE_SERVICE_ROLE_KEY` 写入 `beans` 表，成功返回 `201` 及新记录。
 
 ## 开发提示
 - 启动开发：`npm run dev`（默认启用 Turbopack）

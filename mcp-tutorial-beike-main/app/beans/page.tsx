@@ -1,5 +1,5 @@
+import { BeansSection } from "@/components/beans-section";
 import { Navbar } from "@/components/navbar";
-import { BeansList } from "@/components/beans-list";
 
 export default function BeansPage() {
   return (
@@ -19,7 +19,7 @@ export default function BeansPage() {
             </p>
           </header>
 
-          <BeansList />
+          <BeansSection />
         </div>
       </section>
     </main>
