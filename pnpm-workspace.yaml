@@ -1,0 +1,5 @@
+packages:
+  - mcp-tutorial-beike-main
+allowBuilds:
+  sharp: true
+  unrs-resolver: true

@@ -1,0 +1,10 @@
+{
+  "name": "mcp-tutorial-beike-workspace",
+  "private": true,
+  "scripts": {
+    "dev": "pnpm --dir mcp-tutorial-beike-main dev",
+    "build": "pnpm --dir mcp-tutorial-beike-main build",
+    "start": "pnpm --dir mcp-tutorial-beike-main start",
+    "lint": "pnpm --dir mcp-tutorial-beike-main lint"
+  }
+}
