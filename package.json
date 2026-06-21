@@ -6,5 +6,8 @@
     "build": "pnpm --dir mcp-tutorial-beike-main build",
     "start": "pnpm --dir mcp-tutorial-beike-main start",
     "lint": "pnpm --dir mcp-tutorial-beike-main lint"
+  },
+  "devDependencies": {
+    "shadcn": "^4.11.0"
   }
 }
