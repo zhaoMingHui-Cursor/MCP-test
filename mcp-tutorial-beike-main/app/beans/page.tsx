@@ -1,4 +1,5 @@
 import { BeansSection } from "@/components/beans-section";
+import { CommunityTweets } from "@/components/community-tweets";
 import { Navbar } from "@/components/navbar";
 
 export default function BeansPage() {
@@ -20,6 +21,8 @@ export default function BeansPage() {
           </header>
 
           <BeansSection />
+
+          <CommunityTweets />
         </div>
       </section>
     </main>

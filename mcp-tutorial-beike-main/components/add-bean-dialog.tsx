@@ -18,6 +18,7 @@ import { Textarea } from "@/components/ui/textarea";
 
 type AddBeanDialogProps = {
   onSuccess?: () => void;
+  onError?: () => void;
 };
 
 type FormState = {
@@ -34,6 +35,14 @@ const initialFormState: FormState = {
   origin: "",
   tags: "",
   imageUrl: "",
+};
+
+const testFormState: FormState = {
+  name: "耶加雪菲",
+  flavorProfile: "明亮的柑橘酸质，伴随茉莉花香与蜂蜜甜感，余韵干净悠长。",
+  origin: "埃塞俄比亚",
+  tags: "花香, 柑橘, 水洗",
+  imageUrl: "/bean_08.png",
 };
 
 function parseTags(raw: string): string[] {
@@ -53,7 +62,7 @@ function isFormComplete(form: FormState): boolean {
   );
 }
 
-export function AddBeanDialog({ onSuccess }: AddBeanDialogProps) {
+export function AddBeanDialog({ onSuccess, onError }: AddBeanDialogProps) {
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState<FormState>(initialFormState);
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -73,7 +82,10 @@ export function AddBeanDialog({ onSuccess }: AddBeanDialogProps) {
 
   function handleOpenChange(nextOpen: boolean) {
     setOpen(nextOpen);
-    if (!nextOpen) {
+    if (nextOpen) {
+      setForm(testFormState);
+      setSubmitError(null);
+    } else {
       resetForm();
     }
   }
@@ -115,6 +127,7 @@ export function AddBeanDialog({ onSuccess }: AddBeanDialogProps) {
       setOpen(false);
       onSuccess?.();
     } catch (error) {
+      onError?.();
       setSubmitError(
         error instanceof Error ? error.message : "提交失败，请稍后再试。",
       );
@@ -128,7 +141,7 @@ export function AddBeanDialog({ onSuccess }: AddBeanDialogProps) {
       <Button
         type="button"
         aria-label="添加咖啡豆"
-        onClick={() => setOpen(true)}
+        onClick={() => handleOpenChange(true)}
         className="fixed bottom-8 right-8 z-40 h-14 w-14 rounded-full bg-[#B07A3B] text-white shadow-lg transition hover:bg-[#9A6932] hover:shadow-xl"
       >
         <PlusIcon className="size-6" />
@@ -204,10 +217,10 @@ export function AddBeanDialog({ onSuccess }: AddBeanDialogProps) {
               </Label>
               <Input
                 id="bean-image-url"
-                type="url"
+                type="text"
                 value={form.imageUrl}
                 onChange={(event) => updateField("imageUrl", event.target.value)}
-                placeholder="https://example.com/bean.jpg"
+                placeholder="例如：https://example.com/bean.jpg 或 /bean_08.png"
                 className="border-[#E5C99F] bg-white"
               />
             </div>
