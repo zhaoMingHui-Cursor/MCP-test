@@ -60,12 +60,26 @@
     created_at timestamptz default timezone('utc', now())
   );
   ```
+- `bean_likes`（用户点赞咖啡豆）
+  ```sql
+  create table bean_likes (
+    id uuid primary key default gen_random_uuid(),
+    bean_id uuid not null references beans(id) on delete cascade,
+    user_id uuid not null references auth.users(id) on delete cascade,
+    liked_at timestamptz not null default timezone('utc', now()),
+    unique (user_id, bean_id)
+  );
+  ```
+  - `(user_id, bean_id)` 唯一约束，同一用户对同一咖啡豆只能点赞一次。
+  - 已启用 RLS：登录用户可查看所有点赞、插入/删除自己的点赞记录。
 
 > 规则：如果项目新增数据库表，必须同步在本节追加表名与建表 SQL，以便所有 agents 获取最新 schema 信息。
 
 ## API 接口
 - `GET /api/beans`：返回 `beans` 表的全部记录，按 `created_at` 倒序排列。后端使用 `SUPABASE_SERVICE_ROLE_KEY` 读取数据，前端页面（`app/beans/page.tsx`）通过该接口渲染列表。
 - `POST /api/beans`：创建一条咖啡豆记录。请求体 JSON 字段：`name`、`flavor_profile`、`origin`、`tags`（字符串数组）、`image_url`，全部必填且不可为空。后端校验通过后使用 `SUPABASE_SERVICE_ROLE_KEY` 写入 `beans` 表，成功返回 `201` 及新记录。
+- `POST /api/beans/[id]/likes`：为指定咖啡豆点赞。路径参数 `id` 为咖啡豆 UUID。需登录，服务端从会话获取 `user_id` 后写入 `bean_likes` 表。成功返回 `201` 及点赞记录；已点赞返回 `409`；咖啡豆不存在返回 `404`；未登录返回 `401`。
+- `DELETE /api/beans/[id]/likes`：取消对指定咖啡豆的点赞。路径参数 `id` 为咖啡豆 UUID。需登录，仅删除当前用户自己的点赞记录。成功返回 `200` 及被删除的记录；未点赞返回 `404`；未登录返回 `401`。
 
 ## 开发提示
 - 启动开发：`npm run dev`（默认启用 Turbopack）
